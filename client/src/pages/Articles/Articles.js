@@ -66,71 +66,78 @@ class Articles extends Component {
   render() {
     return (
       <Container fluid>
-        <Row>
-          <Col size="md-6">
-           <Jumbotron>
-              <h1>New York Times Article Scrubber</h1>
-            </Jumbotron>
+        
+         
+        <Jumbotron>
+          <h1>New York Times Article Scrubber</h1>
+        </Jumbotron>
+          <Row> 
 
-            <form>
-              <Input
-                value={this.state.topic}
-                onChange={this.handleInputChange}
-                name="topic"
-                placeholder="Topic (required)"
-              />
-              <Input
-                value={this.state.startYearr}
-                onChange={this.handleInputChange}
-                name="startYear"
-                placeholder="startYear"
-              />
-              <Input
-                value={this.state.endYear}
-                onChange={this.handleInputChange}
-                name="endYear"
-                placeholder="EndYear"
-              />
-              <FormBtn
-                disabled={!(this.state.topic)}
-                onClick={this.handleFormSubmit}
-              >
-                Search
-              </FormBtn>
-            </form>
+            <Col size="md-6">
+              <form>
+                <Input
+                  value={this.state.topic}
+                  onChange={this.handleInputChange}
+                  name="topic"
+                  placeholder="Topic (required)"
+                />
+                <Input
+                  value={this.state.startYearr}
+                  onChange={this.handleInputChange}
+                  name="startYear"
+                  placeholder="startYear"
+                />
+                <Input
+                  value={this.state.endYear}
+                  onChange={this.handleInputChange}
+                  name="endYear"
+                  placeholder="EndYear"
+                />
+                <FormBtn
+                  disabled={!(this.state.topic)}
+                  onClick={this.handleFormSubmit}
+                >
+                  Search
+                </FormBtn>
+              </form>
 
-          </Col> 
-          <Col size="md-6 sm-12">
-            <Jumbotron>
-              <h1>Books On My List</h1>
-            </Jumbotron>
-            {this.state.articles.length ? (
-              <List>
-                {this.state.articles.map(article => (
-                  <ListItem key={article._id}>
+            </Col> 
+            <Col size="md-6 sm-12">
+
+              <Jumbotron>
+                <h1>Saved Articles</h1>
+              </Jumbotron>
+
+              {this.state.articles.length ? (
+                <List>
+                  {this.state.articles.map(article => (
+                    <ListItem key={article._id}>
+                    
+                    {article.section_name}<br />
+                    {article.headline.main}<br />
+                    {article.abstract}<br />
+                    {article.pub_date}<br />
+                    {/* {article.multimedia[2].url}<br /> */}
+                    <a target="blank" href={article.web_url}>
+                      {article.web_url}<br />
+                    </a>
+                    {/* {article.byline.original} */}
                   
-                  {article.section_name}<br />
-                   {article.headline.main}<br />
-                   {article.abstract}<br />
-                   {article.pub_date}<br />
-                   {/* {article.multimedia[2].url} */}
-                   {article.web_url}<br />
-                   {/* {article.byline.original} */}
-                 
                     <DeleteBtn onClick={() => this.deleteBook(article._id)} />
                     {/* need save article button here */}
 
-                  </ListItem>
-                ))}
-              </List>
-            ) : (
-              <h3>No Results to Display</h3>
-            )}
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
+                    </ListItem>
+                  ))}
+                </List>
+              ) : (
+                <h3>No Results to Display</h3>
+              )}
+            </Col>
+
+          </Row>
+        </Container>
+      );
+    }
 }
 
 export default Articles;
