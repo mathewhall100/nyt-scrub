@@ -1,0 +1,8 @@
+.btns {
+  float: right;
+  color: #e74944;
+}
+
+.btns:hover {
+  font-weight: bold;
+}

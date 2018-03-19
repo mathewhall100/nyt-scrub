@@ -8,27 +8,28 @@ const axios = require("axios");
 module.exports = {
 
   findAll: function(req, res) {
-    db.NYTReact
+    db.Article
       .find(req.query)
      //.sort({ date: -1 })
-      .then(dbModel => res.json(dbModel))
+      .then(dbResult => res.json(dbResult))
       .catch(err => res.status(422).json(err));
   },
 
 
   create: function(req, res) {
-    db.NYTReact
+      console.log(req.body)
+    db.Article
       .create(req.body)
-      .then(dbModel => res.json(dbModel))
+      .then(dbResult => res.json(dbResult))
       .catch(err => res.status(422).json(err));
   },
 
 
   remove: function(req, res) {
-    db.NYTReact
+    db.Article
       .findById({ _id: req.params.id })
-      .then(dbModel => dbModel.remove())
-      .then(dbModel => res.json(dbModel))
+      .then(dbResult => dbResult.remove())
+      .then(dbResult => res.json(dbResult))
       .catch(err => res.status(422).json(err));
   }
 };
