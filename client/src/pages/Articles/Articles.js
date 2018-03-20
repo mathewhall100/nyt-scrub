@@ -36,9 +36,8 @@ class Articles extends Component {
         headline: headline,
         abstract: abstract,
         date: date,
-       // image: this.state.mutlimedia[2].url,
         url: url
-       //by: this.state.byline.orginal
+
       })
         .then(res => this.fetchSaved())
         .catch(err => console.log(err));
@@ -56,17 +55,19 @@ class Articles extends Component {
   handleFormSubmit = event => {
     event.preventDefault();
     if (this.state.topic) {
+
       this.setState({ articles: [] })
+
       API.queryNYT(this.state.topic, this.state.startYear, this.state.endYear)
       .then(res => { 
-          for (var i=0; i<res.data.response.docs.length; i++) {
+          for (var i=0; i<5; i++) {
             this.setState({ articles:  [...this.state.articles, res.data.response.docs[i] ]
              })
+             
+            this.setState({ topic: "" })
+            this.setState({ startYear: "" })
+            this.setState({ endYear: "" })
           }
-          this.setState({ topic: "" })
-          this.setState({ startYear: "" })
-          this.setState({ endYear: "" })
-
        })
       .catch(err => console.log(err));
     
@@ -164,11 +165,8 @@ class Articles extends Component {
                   {this.state.saved.map(article => (
                     <ListItem key={article._id}>
                     
-                    {/* {article.section}<br /> */}
                     {article.headline}<br />
-                    {/* {article.abstract}<br /> */}
                     {article.date}<br />
-
                     <a target="blank" href={article.web_url}>
                       {article.url}<br />
                     </a>
