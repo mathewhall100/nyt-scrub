@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import Btn from "../../components/Btn";
 import Jumbotron from "../../components/Jumbotron";
+import Card from "../../components/Card";
 import API from "../../utils/API";
 import { Col, Row, Container } from "../../components/Grid";
 import { List, ListItem } from "../../components/List";
 import { Input, FormBtn } from "../../components/Form";
+import Footer from "../../components/Footer";
+
 
 
 class Articles extends Component {
@@ -13,7 +16,9 @@ class Articles extends Component {
     saved: [],
     topic: "",
     startYear: "",
-    endYear: ""
+    endYear: "",
+    searchPanelDisplay: false
+
   
   };
 
@@ -57,24 +62,28 @@ class Articles extends Component {
     if (this.state.topic) {
 
       this.setState({ articles: [] })
-
+     
       API.queryNYT(this.state.topic, this.state.startYear, this.state.endYear)
       .then(res => { 
+        if (res.data.response.docs.length > 0) {
+
           for (var i=0; i<5; i++) {
             this.setState({ articles:  [...this.state.articles, res.data.response.docs[i] ]
              })
-             
-            this.setState({ topic: "" })
-            this.setState({ startYear: "" })
-            this.setState({ endYear: "" })
-          }
-       })
+            }
+          this.setState({ topic: "" })
+          this.setState({ startYear: "" })
+          this.setState({ endYear: "" })
+          
+        } 
+        this.setState({ searchPanelDisplay: true })
+      })
       .catch(err => console.log(err));
-    
-    }
-  };
+      }
+    };
 
-// handle changes to form elements as inpurt changes
+  
+// handle changes to form elements as input changes
   handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({
@@ -86,79 +95,81 @@ class Articles extends Component {
   // Render component
   render() {
     return (
-      <Container fluid>
+      <Container>
         
-         
-        <Jumbotron>
-          <h1>New York Times Article Scrubber</h1>
-        </Jumbotron>
+        <Jumbotron />
           <Row> 
+            <Col size="md-6"> 
 
-            <Col size="md-6">
-              <form>
-                <Input
-                  value={this.state.topic}
-                  onChange={this.handleInputChange}
-                  name="topic"
-                  placeholder="Topic (required)"
-                />
-                <Input
-                  value={this.state.startYear}
-                  onChange={this.handleInputChange}
-                  name="startYear"
-                  placeholder="StartYear"
-                />
-                <Input
-                  value={this.state.endYear}
-                  onChange={this.handleInputChange}
-                  name="endYear"
-                  placeholder="EndYear"
-                />
-                <FormBtn
-                  disabled={!(this.state.topic)}
-                  onClick={this.handleFormSubmit}
-                >
-                  Search
-                </FormBtn>
-              </form>
+              <Card header={"Search for an article"}>
+                <form>
+                
+                  <Input
+                    value={this.state.topic}
+                    onChange={this.handleInputChange}
+                    name="topic"
+                    placeholder="Topic (required)"
+                  />
+                  <Input
+                    value={this.state.startYear}
+                    onChange={this.handleInputChange}
+                    name="startYear"
+                    placeholder="StartYear"
+                  />
+                  <Input
+                    value={this.state.endYear}
+                    onChange={this.handleInputChange}
+                    name="endYear"
+                    placeholder="EndYear"
+                  />
+                  <FormBtn
+                    disabled={!(this.state.topic)}
+                    onClick={this.handleFormSubmit}
+                  >
+                    Search
+                  </FormBtn>
+                </form>
 
-              <Jumbotron>
-                <h1>Search results</h1>
-              </Jumbotron>
+              </Card>
 
-              {this.state.articles.length ? (
-                <List>
-                  {this.state.articles.map(article => (
-                    <ListItem key={article._id}>
-                    
-                    {article.headline.main}<br />
-                    {article.pub_date}<br />
+              <br /><br />
 
-                    <a target="blank" href={article.web_url}>
-                      {article.web_url}<br />
-                    </a>
+              <Card style={{ display: this.state.searchPanelDisplay ? 'block' : 'none'}} header={"Search Results"}>
 
-                    <Btn text="Save" onClick={() => this.saveNewArticle(
-                      article.section_name,
-                      article.headline.main,
-                      article.abstract,
-                      article.pub_date,
-                      article.web_url
-                  )} /><br />
+                {this.state.articles.length ? (
+                
+                  <List>
+                    {this.state.articles.map(article => (
+                      <ListItem key={article._id}>
+                      
+                      {article.headline.main}<br />
+                      {article.pub_date}<br />
 
-                    </ListItem>
-                  ))}
-                </List>
-              ) : (
-                <h3>No Results to Display</h3>
-              )}
+                      <a target="blank" href={article.web_url}>
+                        {article.web_url}<br />
+                      </a>
+
+                      <Btn text="Save" onClick={() => this.saveNewArticle(
+                        article.section_name,
+                        article.headline.main,
+                        article.abstract,
+                        article.pub_date,
+                        article.web_url
+                    )} /><br />
+
+                      </ListItem>
+                    ))}
+                  </List>
+                ) : (
+                  <h3>No Results to Display</h3>
+                )}
+
+              </Card>
 
             </Col> 
             <Col size="md-6 sm-12">
 
-              <Jumbotron>
-                <h1>Saved Articles</h1>
-              </Jumbotron>
+              <Card header={"Saved articles"}>
 
               {this.state.saved.length ? (
                 <List>
@@ -180,9 +191,12 @@ class Articles extends Component {
                 <h3>No Results to Display</h3>
               )}
 
-            </Col>
+              </Card> 
 
+            </Col>
           </Row>
+
+          <Footer />
         </Container>
       );
     }

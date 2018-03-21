@@ -1,0 +1,12 @@
+.jumbotron {    
+    clear: "both";
+    height: 240px
+}
+
+.header {
+    background-image: url("./../../images/nytimage.PNG");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: top left;
+
+}
