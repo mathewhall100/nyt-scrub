@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const routes = require("./routes");
 const http = require('http');
-const socketIO = require('socket.io', {transports: ['websocket']});
+const socketIO = require('socket.io');
 const app = express();
 
 const PORT = process.env.PORT || 3001;
@@ -47,8 +47,6 @@ io.on('connection', (socket) => {
   })
 
 });
-
-
 
 
 
