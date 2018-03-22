@@ -55,24 +55,20 @@ class Articles extends Component {
   };
 
   // Save selected article to database
-  saveNewArticle = (section, headline, abstract, date, url) => {
+  saveNewArticle = (headline, date, url) => {
       API.saveArticle({
-        section: section,
         headline: headline,
-        abstract: abstract,
         date: date,
         url: url
-
       })
         .then( res => {
 
-          socket.emit('article saved', res.data.headline)
+          socket.emit('article saved', res.data.headline);
 
           this.fetchSaved();
 
         })
         .catch(err => console.log(err));
-
   };
 
 // Delete selected article from database
