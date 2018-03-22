@@ -9,8 +9,8 @@ import { Input, FormBtn } from "../../components/Form";
 import Footer from "../../components/Footer";
 
 import openSocket from 'socket.io-client';
-const socket = openSocket();
-//const socket = openSocket('http://localhost:8000');
+//const socket = openSocket();
+const socket = openSocket('http://localhost:8000');
 
 socket.on('connect', socket => {
   console.log("SOCKET CLIENT CONNECTED");
