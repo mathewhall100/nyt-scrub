@@ -44,7 +44,7 @@ io.on('connection', (socket) => {
 });
 
 io.listen(8000);
-console.log("socket.io listening on port 8000")
+console.log("socket.io listening on port 8000");
 
 // Start the API server
 app.listen(PORT, function() {
