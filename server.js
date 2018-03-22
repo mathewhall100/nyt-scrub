@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const routes = require("./routes");
 const http = require('http');
-const io = require('socket.io')();
+const socketIO = require('socket.io', {transports: ['websocket']});
 const app = express();
 
 const PORT = process.env.PORT || 3001;
@@ -28,6 +28,11 @@ mongoose.connect(
   }
 );
 
+const server = http.createServer(app);
+const io = socketIO(server)
+
+//io.listen(8000);
+//console.log("socket.io listening on port 8000");
 
 io.on('connection', (socket) => {
   console.log("SOCKET SERVER CONNECTED");
@@ -43,8 +48,9 @@ io.on('connection', (socket) => {
 
 });
 
-io.listen(8000);
-console.log("socket.io listening on port 8000");
+
+
+
 
 // Start the API server
 app.listen(PORT, function() {
