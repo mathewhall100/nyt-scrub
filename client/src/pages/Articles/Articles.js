@@ -8,30 +8,50 @@ import { List, ListItem } from "../../components/List";
 import { Input, FormBtn } from "../../components/Form";
 import Footer from "../../components/Footer";
 
+import openSocket from 'socket.io-client';
+const socket = openSocket('http://localhost:8000');
 
+socket.on('connect', socket => {
+  console.log("SOCKET CLIENT CONNECTED");
+});
 
 class Articles extends Component {
+
   state = {
     articles: [],
     saved: [],
     topic: "",
     startYear: "",
     endYear: "",
-    searchPanelDisplay: false
-
+    searchPanelDisplay: false, 
+    savedAlert: false
   
   };
 
   // Call funtion to fetch all saved articles once Articles component has mounted
   componentDidMount() {
-    this.fetchSaved();
-  }
+   
+    this.fetchSaved(); 
+    this.socketRecieve();
+  };
 
   // Fetch saved articles from database
   fetchSaved = () => {
     API.getArticles()
     .then(res => this.setState({ saved: res.data}) )
     .catch(err => console.log(err));
+  };
+
+
+// Function to listen at socket for emitted messages
+  socketRecieve = () => {
+      socket.on('new saved article', data => {
+      console.log(`New article saved: ${data}`);
+      alert(`New saved article: ${data}`)
+
+      this.fetchSaved();
+    })
+
   };
 
   // Save selected article to database
@@ -44,7 +64,13 @@ class Articles extends Component {
         url: url
 
       })
-        .then(res => this.fetchSaved())
+        .then( res => {
+
+          socket.emit('article saved', res.data.headline)
+
+          this.fetchSaved();
+
+        })
         .catch(err => console.log(err));
 
   };
@@ -94,16 +120,17 @@ class Articles extends Component {
 
   // Render component
   render() {
+
     return (
       <Container>
         
         <Jumbotron />
+
           <Row> 
             <Col size="md-6"> 
-
               <Card header={"Search for an article"}>
+
                 <form>
-                
                   <Input
                     value={this.state.topic}
                     onChange={this.handleInputChange}
@@ -128,78 +155,75 @@ class Articles extends Component {
                   >
                     Search
                   </FormBtn>
+                  <br />
                 </form>
 
               </Card>
-
               <br /><br />
-
               <Card style={{ display: this.state.searchPanelDisplay ? 'block' : 'none'}} header={"Search Results"}>
 
                 {this.state.articles.length ? (
-                
+
                   <List>
                     {this.state.articles.map(article => (
+
                       <ListItem key={article._id}>
-                      
-                      {article.headline.main}<br />
-                      {article.pub_date}<br />
+                        {article.headline.main}<br />
+                        {article.pub_date}<br />
+                        <a target="blank" href={article.web_url}>
+                          {article.web_url}<br />
+                        </a>
 
-                      <a target="blank" href={article.web_url}>
-                        {article.web_url}<br />
-                      </a>
-
-                      <Btn text="Save" onClick={() => this.saveNewArticle(
-                        article.section_name,
-                        article.headline.main,
-                        article.abstract,
-                        article.pub_date,
-                        article.web_url
-                    )} /><br />
-
+                        <Btn text="Save" onClick={() => this.saveNewArticle(
+                          article.headline.main,
+                          article.pub_date,
+                          article.web_url
+                        )} /><br />
                       </ListItem>
+
                     ))}
                   </List>
+
                 ) : (
                   <h3>No Results to Display</h3>
                 )}
 
               </Card>
-
             </Col> 
             <Col size="md-6 sm-12">
-
               <Card header={"Saved articles"}>
 
               {this.state.saved.length ? (
+
                 <List>
                   {this.state.saved.map(article => (
+
                     <ListItem key={article._id}>
-                    
-                    {article.headline}<br />
-                    {article.date}<br />
-                    <a target="blank" href={article.web_url}>
-                      {article.url}<br />
-                    </a>
+                      {article.headline}<br />
+                      {article.date}<br />
+                      <a target="blank" href={article.web_url}>
+                        {article.url}<br />
+                      </a>
 
-                    <Btn text="✗" onClick={() => this.deleteArticle( article._id )} /><br />
-
+                      <Btn text="✗" onClick={() => this.deleteArticle( article._id )} /><br />
                     </ListItem>
+
                   ))}
                 </List>
+
               ) : (
                 <h3>No Results to Display</h3>
               )}
 
               </Card> 
-
             </Col>
           </Row>
 
-          <Footer />
-        </Container>
-      );
-    }
+        <Footer />
+
+      </Container>
+    );
+  }
 }
 
 export default Articles;
