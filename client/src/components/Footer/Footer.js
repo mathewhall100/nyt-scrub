@@ -8,7 +8,7 @@ const Footer = () => (
         New York<br />
         111-216-3456
         
-        <span className="rightText">2018. No copyright whatsoever.</span>
+        <span className="rightText">2018. Mathew hall.</span>
     
     </p>
     

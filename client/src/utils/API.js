@@ -1,8 +1,8 @@
 import axios from "axios";
 
 // query NYT API
-
-const queryURLBase = "https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=" + process.env.REACT_APP_AUTH_KEY + "&q=";
+const authKey = "Mt6f7vqnDPBtMVbrZM1IM7EG7fI0eQxL"
+const queryURLBase = "https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=" + authKey + "&q=";
 
 let start = "";
 let end = "";
