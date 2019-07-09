@@ -1,11 +1,16 @@
 .footer {
+    flex-shrink: 0;
     height: 100px;
-    width: 100%;
-    margin-top: 15px;
+    width: 1170px;
+    margin: 0px auto;
     padding: 10px;
     background-color: #dddddd
 }
+.footer p {
+    margin-left: 10px
+}
 
 .rightText {
-    float: right
+    float: right;
+    margin-right: 10px
 }

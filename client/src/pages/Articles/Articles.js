@@ -7,6 +7,7 @@ import { Col, Row, Container } from "../../components/Grid";
 import { List, ListItem } from "../../components/List";
 import { Input, FormBtn } from "../../components/Form";
 import Footer from "../../components/Footer";
+import './articles.css';
 
 import openSocket from 'socket.io-client';
 const socket = openSocket();
@@ -119,106 +120,116 @@ class Articles extends Component {
   render() {
 
     return (
-      <Container>
-        
-        <Jumbotron />
 
-          <Row> 
-            <Col size="md-6"> 
-              <Card header={"Search for an article"}>
+      	<div style={{minHeight: "100vh", }}>
+			<div class="body">
+				<div style={{flex: "1 0 auto", paddingBottom: "100px"}}>
 
-                <form>
-                  <Input
-                    value={this.state.topic}
-                    onChange={this.handleInputChange}
-                    name="topic"
-                    placeholder="Topic (required)"
-                  />
-                  <Input
-                    value={this.state.startYear}
-                    onChange={this.handleInputChange}
-                    name="startYear"
-                    placeholder="StartYear"
-                  />
-                  <Input
-                    value={this.state.endYear}
-                    onChange={this.handleInputChange}
-                    name="endYear"
-                    placeholder="EndYear"
-                  />
-                  <FormBtn
-                    disabled={!(this.state.topic)}
-                    onClick={this.handleFormSubmit}
-                  >
-                    Search
-                  </FormBtn>
-                  <br />
-                </form>
+					<Container>
+						
+						<Jumbotron />
 
-              </Card>
-              <br /><br />
-              <Card style={{ display: this.state.searchPanelDisplay ? 'block' : 'none'}} header={"Search Results"}>
+						<Row> 
+							<Col size="md-6"> 
+							<Card header={"Search for an article"}>
 
-                {this.state.articles.length ? (
+								<form>
+								<Input
+									value={this.state.topic}
+									onChange={this.handleInputChange}
+									name="topic"
+									placeholder="Topic (required)"
+								/>
+								<Input
+									value={this.state.startYear}
+									onChange={this.handleInputChange}
+									name="startYear"
+									placeholder="StartYear"
+								/>
+								<Input
+									value={this.state.endYear}
+									onChange={this.handleInputChange}
+									name="endYear"
+									placeholder="EndYear"
+								/>
+								<FormBtn
+									disabled={!(this.state.topic)}
+									onClick={this.handleFormSubmit}
+								>
+									Search
+								</FormBtn>
+								<br />
+								</form>
 
-                  <List>
-                    {this.state.articles.map(article => (
+							</Card>
+							<br /><br />
+							<Card style={{ display: this.state.searchPanelDisplay ? 'block' : 'none'}} header={"Search Results"}>
 
-                      <ListItem key={article._id}>
-                        {article.headline.main}<br />
-                        {article.pub_date}<br />
-                        <a target="blank" href={article.web_url}>
-                          {article.web_url}<br />
-                        </a>
+								{this.state.articles.length ? (
 
-                        <Btn text="Save" onClick={() => this.saveNewArticle(
-                          article.headline.main,
-                          article.pub_date,
-                          article.web_url
-                        )} /><br />
-                      </ListItem>
+								<List>
+									{this.state.articles.map(article => (
 
-                    ))}
-                  </List>
+									<ListItem key={article._id}>
+										{article.headline.main}<br />
+										{article.pub_date}<br />
+										<a target="blank" href={article.web_url}>
+										{article.web_url}<br />
+										</a>
 
-                ) : (
-                  <h3>No Results to Display</h3>
-                )}
+										<Btn text="Save" onClick={() => this.saveNewArticle(
+										article.headline.main,
+										article.pub_date,
+										article.web_url
+										)} /><br />
+									</ListItem>
 
-              </Card>
-            </Col> 
-            <Col size="md-6 sm-12">
-              <Card header={"Saved articles"}>
+									))}
+								</List>
 
-              {this.state.saved.length ? (
+								) : (
+								<h3>No Results to Display</h3>
+								)}
 
-                <List>
-                  {this.state.saved.map(article => (
+							</Card>
+							</Col> 
+							<Col size="md-6 sm-12">
+							<Card header={"Saved articles"}>
 
-                    <ListItem key={article._id}>
-                      {article.headline}<br />
-                      {article.date}<br />
-                      <a target="blank" href={article.web_url}>
-                        {article.url}<br />
-                      </a>
+							{this.state.saved.length ? (
 
-                      <Btn text="✗" onClick={() => this.deleteArticle( article._id )} /><br />
-                    </ListItem>
+								<List>
+								{this.state.saved.map(article => (
 
-                  ))}
-                </List>
+									<ListItem key={article._id}>
+									{article.headline}<br />
+									{article.date}<br />
+									<a target="blank" href={article.web_url}>
+										{article.url}<br />
+									</a>
 
-              ) : (
-                <h3>No Results to Display</h3>
-              )}
+									<Btn text="✗" onClick={() => this.deleteArticle( article._id )} /><br />
+									</ListItem>
 
-              </Card> 
-            </Col>
-          </Row>
+								))}
+								</List>
 
-        <Footer />
+							) : (
+								<h3>No Results to Display</h3>
+							)}
 
-      </Container>
+							</Card> 
+							</Col>
+						</Row>
+
+					</Container>
+				
+				</div>  
+
+				<Footer />
+
+			</div>
+		</div>
     );
   }
 }
