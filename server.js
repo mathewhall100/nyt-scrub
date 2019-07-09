@@ -38,8 +38,8 @@ const server = app.listen(PORT, function() {
 const io = socketIO(server)
 
 
-//io.listen(8000);
-//console.log("socket.io listening on port 8000");
+io.listen(8000);
+console.log("socket.io listening on port 8000");
 
 io.on('connection', (socket) => {
   console.log("SOCKET SERVER CONNECTED");
